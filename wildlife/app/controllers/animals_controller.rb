@@ -7,7 +7,10 @@ class AnimalsController < ApplicationController
 
     def show
         @animal = Animal.find([params[:id]])
-        render json: @animal
+        @sightings = Sighting.where(animal_id: params[:id])
+        @all = []
+        @all << @animal << @sightings
+        render json: (@all)
     end
 
     def create
@@ -40,9 +43,5 @@ class AnimalsController < ApplicationController
     private
     def animals_params
         params.require(:animal).permit(:strings, :CommonName, :LatinName, :Kingdom)
-    end
-
-    def sightings_params
-        params.require(:sighting).permit(:datetime, :date, :float, :latitude, :longitude)
     end
 end
